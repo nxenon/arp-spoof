@@ -8,6 +8,19 @@ author = 'xenon-xenon'
 author_github = 'https://github.com/xenon-xenon'
 '''
 
+banner_text = '''
+           _____ _____  
+     /\   / ____|  __ \ 
+    /  \ | |    | |__) |
+   / /\ \| |    |  ___/ 
+  / ____ \ |____| |     
+ /_/    \_\_____|_|     
+'''
+
+def print_banner():
+    print(banner_text)
+
+
 from scapy.all import *
 from scapy.layers.inet import *
 from scapy.layers.l2 import *
@@ -132,6 +145,7 @@ class ArpSpoof:
 
 
 if __name__ == '__main__' :
+    print_banner() # print script's banner
     print('\n***You have to run this script with root privileges***')
     print('***You should have enabled ip forwarding on your machine***\n')
     # define parser and its arguments
